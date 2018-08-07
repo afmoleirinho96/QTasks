@@ -4,20 +4,34 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		jcenter() //adicionado
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		//adicionada esta dependência para o Node
+		classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'com.moowork.node'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.QTasks'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
+//adicionado para integrar node/angular com SpringBoot, através do gradle
+node {
+  version = '8.11.3'
+  npmVersion = '5.6.0'
+  download = true
+  workDir = file("${project.buildDir}/web")
+  nodeModulesDir = file("${project.projectDir}/web")
+}
+
 
 repositories {
 	mavenCentral()
@@ -29,4 +43,23 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+/*adicionadas tasks para o ng build para correr gradle bootRun com propriedade ngbuild
+**E colocar, pós building da aplicação, na pasta static 
+**Desta maneira, é possível correr o backend/frontend em simultâneo com este comando somente na pasta /QTasks - gradle bootRun -Pngbuild
+**Ficheiros do frontend irão para o frontend
+*/
+
+
+
+task runNGBuild(type: NpmTask){
+	args = ['run', '--prefix', 'web', 'build'] 
+}
+
+task NGBuild(){
+	if( project.hasProperty('ngbuild')){
+		processResources.dependsOn 'npmInstall'
+		processResources.dependsOn 'runNGBuild'
+	}
 }
