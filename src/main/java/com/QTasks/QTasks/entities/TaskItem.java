@@ -10,6 +10,8 @@ public class TaskItem {
 	@Id
 	@GeneratedValue
 	
+	private String description;
+	//private boolean completed;
 	private long id;
 
 	public long getId() {
@@ -18,5 +20,13 @@ public class TaskItem {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
