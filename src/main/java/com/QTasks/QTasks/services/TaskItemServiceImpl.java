@@ -1,5 +1,7 @@
 package com.QTasks.QTasks.services;
 
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class TaskItemServiceImpl implements TaskItemService {
 	@Autowired //JPA
 	TaskItemRepository taskItemRepository;
 	
-	//Retirado da iplementação do CrudRepository
+	//Retirado da implementação do CrudRepository
 	/**
 	 * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
 	 * entity instance completely.
@@ -23,6 +25,12 @@ public class TaskItemServiceImpl implements TaskItemService {
 	@Override
 	public TaskItem save(TaskItem taskItem) {
 		return this.taskItemRepository.save(taskItem);
+	}
+
+	@Override
+	public List<TaskItem> findAll() {
+		
+		return taskItemRepository.findAll();
 	}
 
 }

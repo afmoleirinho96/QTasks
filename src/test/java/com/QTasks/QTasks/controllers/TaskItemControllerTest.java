@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import java.util.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,6 +40,23 @@ public class TaskItemControllerTest {
 		when(taskItemService.save(taskItemRequest)).thenReturn(taskItemResponse);
 		
 		assertThat(subject.createTaskItem(taskItemRequest).getId(), equalTo(300L));
+	}
+	
+	@Test
+	public void testFindAllShouldReturnList(){
+		final List<TaskItem> taskItems= new ArrayList<TaskItem>();
+		
+		final TaskItem taskItem= new TaskItem();
+		taskItem.setDescription("I am a task list Item");
+		taskItem.setId(200L);
+		
+		taskItems.add(taskItem);
+		
+		when(taskItemService.findAll()).thenReturn(taskItems);
+		
+		final List<TaskItem> result= subject.findAll();
+		
+		assertThat(result.size(),equalTo(1));
 	}
 
 }

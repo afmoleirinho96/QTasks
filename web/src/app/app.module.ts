@@ -1,11 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import {FormsModule, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { HttpModule } from '@angular/http';
+
 //added
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule} from './app-routing.module';
 import { TaskItemListComponent } from './components/task-item-list/task-item-list.component';
+import { TaskItemService } from './services/task-item.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -15,9 +18,10 @@ import { TaskItemListComponent } from './components/task-item-list/task-item-lis
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [TaskItemService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
