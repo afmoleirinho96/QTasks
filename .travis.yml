@@ -1,0 +1,18 @@
+language: java
+install: true
+addons: 
+  sonarcloud:
+  organization: afmoleirinho96
+  token:
+    secure:
+
+script:
+  ./gradlew clean check build
+
+cache:
+  directories:
+    $HOME/.m2/repository
+    $HOME/.sonar/cache
+    $HOME/.gradle
+    .gradle
+  
