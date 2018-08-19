@@ -3,6 +3,7 @@ package com.QTasks.QTasks.controllers;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,5 +38,15 @@ public class TaskItemController {
 	public @ResponseBody List<TaskItem> findAll() {		
 		return taskItemService.findAll();
 	}
+	
+	@RequestMapping(value= "/{id}", method=RequestMethod.DELETE)
+	public @ResponseBody void  delete(@PathVariable("id") Long taskItemId) {
+		taskItemService.delete(taskItemId);
+		
+	}
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public @ResponseBody TaskItem update(@PathVariable("id") Long taskItemId, @RequestBody TaskItem taskItem) {
+    		return taskItemService.update(taskItemId, taskItem);
+    }
 
 }

@@ -2,8 +2,9 @@ package com.QTasks.QTasks.services;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 import java.util.*;
 import org.junit.Test;
@@ -62,8 +63,22 @@ public class TaskItemServiceTest {
 		assertThat(result.size(), equalTo(1));
 		
 		
+	}
+	
+	@Test
+	public void testDeleteShouldRemoveRepository() {
+		final long idToDelete=50L;
+		
+		doNothing().when(taskItemRepository).deleteById(idToDelete);
+		
+
+		subject.delete(idToDelete);
+		
+		verify(taskItemRepository).deleteById(idToDelete);
+		
 		
 	}
+	
 
 	
 }

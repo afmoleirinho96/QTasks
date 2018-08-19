@@ -5,11 +5,15 @@
       <form [formGroup]="taskForm" novalidate (ngSubmit)="onSubmit(taskForm.value)">
         <div class="row">
           <div class="col-10">
-            <input type="text" class="form-control" formControlName="item">
+            <input type="text" class="form-control" formControlName="item" #description>
           </div>
           <div class="col-2 ml-auto text-right">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" *ngIf="!selectedTaskItem">
               <span>Create Task</span>
+            </button>
+
+            <button type="submit" class="btn btn-primary" *ngIf="selectedTaskItem">
+              <span>Update Task</span>
             </button>
           </div>
         </div>
@@ -18,18 +22,36 @@
       <div class="row">
         <table class="table">
           <thead>
+            <!-- Table Rows and headers-->
             <tr>
               <th class="w-75">Task</th>
+              
               <th class="text-right">Action</th>
+              <th class="text-right">Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let taskItem of taskItems">
-              <td>{{taskItem.description}}</td>
-              <td></td>
+            <!-- Data to be displayed-->
+            <tr *ngFor="let taskItem of taskItems | paginate: {itemsPerPage:5, currentPage:p}" (click)="selectTaskItem(taskItem)">
+              <td class="alert alert-primary" role="alert">{{taskItem.description}}</td>
+              <td class="text-right" class="alert alert-danger" role="alert">
+                <button class="btn btn-danger" (click)="onDelete(taskItem); $event.stopPropagation();" >Delete
+                </button>
+              </td>
+              <td class="text-right" class="alert alert-dark" role="alert">
+               <a class="alert-link">Completed</a><br>
+              </td>
+              <!-- compelted or not-->
             </tr>
+            
           </tbody>
         </table>
+         
+        <pagination-controls class="myPagination"
+        previousLabel ="Previous Page"
+        nextLabel="Next Page"
+          (pageChange)="p = $event" maxSize="4"> 
+        </pagination-controls>
       </div>
     </div>
   </div>

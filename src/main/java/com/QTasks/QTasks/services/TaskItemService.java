@@ -17,4 +17,8 @@ public interface TaskItemService {
 	
 	//Comunica com o Repositório para retornar lista de Tasks
 	public List<TaskItem> findAll();
+	
+	public void delete(long taskItemId);
+	
+	public TaskItem update(long taskItemId, TaskItem taskItem);
 }

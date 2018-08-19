@@ -2,6 +2,8 @@ package com.QTasks.QTasks.controllers;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.*;
@@ -57,6 +59,21 @@ public class TaskItemControllerTest {
 		final List<TaskItem> result= subject.findAll();
 		
 		assertThat(result.size(),equalTo(1));
+	}
+	
+	@Test
+	public void testDeleteShouldRemove() {
+		
+		final long idToDelete = 50L;
+		
+		doNothing().when(taskItemService).delete(idToDelete);
+		
+		
+		subject.delete(idToDelete);
+		
+		verify(taskItemService).delete(idToDelete);
+		
+		
 	}
 
 }

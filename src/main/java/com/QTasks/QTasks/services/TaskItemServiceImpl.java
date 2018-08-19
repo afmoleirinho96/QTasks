@@ -33,4 +33,25 @@ public class TaskItemServiceImpl implements TaskItemService {
 		return taskItemRepository.findAll();
 	}
 
+	@Override
+	public void delete(long taskItemId) {
+		taskItemRepository.deleteById(taskItemId);
+		
+	}
+	
+	@Override
+	public TaskItem update(long taskItemId, TaskItem taskItem) {
+		
+		TaskItem taskItemToUpdate = taskItemRepository.findById(taskItemId).orElse(null);
+		
+		taskItemToUpdate.setDescription(taskItem.getDescription());
+		
+		return this.save(taskItemToUpdate);
+		
+	}
+
+
+
+
+
 }
