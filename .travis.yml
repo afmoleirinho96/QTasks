@@ -2,12 +2,12 @@ language: java
 install: true
 addons: 
   sonarcloud:
-  organization: afmoleirinho96
+  organization: afmoleirinho96-github
   token:
-    secure:
+    secure: 3ec6c38dacb1cfa5d21644ee4da28e139962c7fc
 
 script:
-  ./gradlew clean check build
+  gradle clean check sonarqube build
 
 cache:
   directories:
