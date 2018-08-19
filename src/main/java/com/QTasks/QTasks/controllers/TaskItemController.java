@@ -3,7 +3,10 @@ package com.QTasks.QTasks.controllers;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,14 +30,14 @@ public class TaskItemController {
 	TaskItemService taskItemService;
 	
 	//Controller recebe um request POST e guarda a task. Através da função save do Service
-	@RequestMapping(value="", method=RequestMethod.POST)
+	@PostMapping
 	public @ResponseBody TaskItem createTaskItem( @RequestBody TaskItem taskItem) {		
 		return taskItemService.save(taskItem);
 	}
 	
 	
 	//Controller recebe um request GET e retorna a lista de itens. Através da função findAll do Service
-	@RequestMapping(value="", method=RequestMethod.GET)
+	@GetMapping
 	public @ResponseBody List<TaskItem> findAll() {		
 		return taskItemService.findAll();
 	}
@@ -44,7 +47,7 @@ public class TaskItemController {
 		taskItemService.delete(taskItemId);
 		
 	}
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping(value = "/{id}")
     public @ResponseBody TaskItem update(@PathVariable("id") Long taskItemId, @RequestBody TaskItem taskItem) {
     		return taskItemService.update(taskItemId, taskItem);
     }

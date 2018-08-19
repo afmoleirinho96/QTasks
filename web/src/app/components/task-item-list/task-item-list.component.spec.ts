@@ -95,7 +95,6 @@ describe('TaskItemListComponent', () => {
   describe("onDelete", () => {
     it("should remove a task item to the todo item array", () => {
 
-
       let taskItem1 = new TaskItem();
       taskItem1.description = "test";
       taskItem1.id = 50;
@@ -108,8 +107,6 @@ describe('TaskItemListComponent', () => {
       spyOn(taskItemService, 'deleteTaskItem').and.returnValue(Observable.of(taskItem1));
       component.taskItems.push(taskItem1);
       component.taskItems.push(taskItem2);
-
-
 
       component.onDelete(taskItem1, event);
 
@@ -134,7 +131,4 @@ describe('TaskItemListComponent', () => {
 
     })
   });
-
-
-
 }); 

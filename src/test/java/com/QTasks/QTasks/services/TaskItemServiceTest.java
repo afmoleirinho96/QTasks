@@ -28,14 +28,11 @@ public class TaskItemServiceTest {
 	@Test
 	public void testSaveAndReturnTaskItem() {
 		final TaskItem taskItem= new TaskItem();
-		taskItem.setDescription("This is a task");
-		
-		
+		taskItem.setDescription("This is a task");		
 		//Response
 		final TaskItem taskItemResponse = new TaskItem();
 		taskItemResponse.setId(100L);
-		taskItemResponse.setDescription("This is a task");
-		
+		taskItemResponse.setDescription("This is a task");		
 		//Teste para quando guardarmos uma task, recebermos uma resposta
 		when(taskItemRepository.save(taskItem)).thenReturn(taskItemResponse);
 		
