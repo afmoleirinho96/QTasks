@@ -67,13 +67,31 @@ public class TaskItemControllerTest {
 		final long idToDelete = 50L;
 		
 		doNothing().when(taskItemService).delete(idToDelete);
-		
-		
+			
 		subject.delete(idToDelete);
 		
 		verify(taskItemService).delete(idToDelete);
 		
-		
 	}
+	 @Test
+	 public void testUpdateShouldReturnUpdatedTaskItem() {
+		 final long idToUpdate = 60L;
+	
+		 final TaskItem TaskItemRequest = new TaskItem();
+		 TaskItemRequest.setId(60L);
+		 TaskItemRequest.setDescription("old description");
+
+		 final TaskItem TaskItemResponse = new TaskItem();
+		 TaskItemResponse.setId(60L);
+		 TaskItemResponse.setDescription("updated description");
+
+		 when(taskItemService.update(idToUpdate, TaskItemRequest)).thenReturn(TaskItemResponse);
+
+		 TaskItem response = subject.update(60L, TaskItemRequest);
+		 assertThat(response.getId(), equalTo(60L));
+		 assertThat(response.getDescription(), equalTo("updated description"));
+	}
+	
+	
 
 }

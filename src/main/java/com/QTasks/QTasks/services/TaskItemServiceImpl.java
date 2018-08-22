@@ -41,8 +41,7 @@ public class TaskItemServiceImpl implements TaskItemService {
 	
 	@Override
 	public TaskItem update(long taskItemId, TaskItem taskItem) {
-		
-		TaskItem taskItemToUpdate = taskItemRepository.findById(taskItemId).orElse(null);
+		TaskItem taskItemToUpdate = taskItemRepository.getOne(taskItemId);
 		
 		taskItemToUpdate.setDescription(taskItem.getDescription());
 		

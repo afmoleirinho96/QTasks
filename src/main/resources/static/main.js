@@ -142,6 +142,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
 /* harmony import */ var _components_task_item_list_task_item_list_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/task-item-list/task-item-list.component */ "./src/app/components/task-item-list/task-item-list.component.ts");
 /* harmony import */ var _services_task_item_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/task-item.service */ "./src/app/services/task-item.service.ts");
+/* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -153,6 +154,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 //added
+
 
 
 
@@ -171,7 +173,8 @@ var AppModule = /** @class */ (function () {
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
                 _angular_http__WEBPACK_IMPORTED_MODULE_3__["HttpModule"],
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"]
+                _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
+                ngx_pagination__WEBPACK_IMPORTED_MODULE_8__["NgxPaginationModule"]
             ],
             providers: [_services_task_item_service__WEBPACK_IMPORTED_MODULE_7__["TaskItemService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
@@ -202,7 +205,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fuid\">\n  <br>\n  <div class=\"row\">\n    <div class=\"col-10 mx-auto\">\n      <form [formGroup]=\"taskForm\">\n        <div class=\"row\">\n          <div class=\"col-10\">\n            <input type=\"text\" class=\"form-control\" formControlName=\"item\">\n          </div>\n          <div class=\"col-2 ml-auto text-right\">\n            <button type=\"submit\" class=\"btn btn-primary\">\n              <span>Create Task</span>\n            </button>\n          </div>\n        </div>\n      </form>\n      <br>\n      <div class=\"row\">\n        <table class=\"table\">\n          <thead>\n            <tr>\n              <th class=\"w-75\">Task</th>\n              <th class=\"text-right\">Action</th>\n            </tr>\n          </thead>\n          <tbody>\n          </tbody>\n        </table>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container-fuid\">\n  <br>\n  <div class=\"row\">\n    <div class=\"col-10 mx-auto\">\n      <form [formGroup]=\"taskForm\" novalidate (ngSubmit)=\"onSubmit(taskForm.value)\">\n        <div class=\"row\">\n          <div class=\"col-10\">\n            <input type=\"text\" class=\"form-control\" formControlName=\"item\" #description>\n          </div>\n          <div class=\"col-2 ml-auto text-right\">\n            <button type=\"submit\" class=\"btn btn-primary\" *ngIf=\"!selectedTaskItem\">\n              <span>Create Task</span>\n            </button>\n\n            <button type=\"submit\" class=\"btn btn-primary\" *ngIf=\"selectedTaskItem\">\n              <span>Update Task</span>\n            </button>\n          </div>\n        </div>\n      </form>\n      <br>\n      <div class=\"row\">\n        <table class=\"table\">\n          <thead>\n            <!-- Table Rows and headers-->\n            <tr>\n              <th class=\"w-75\">Task</th>\n              \n              <th class=\"text-right\">Action</th>\n              <th class=\"text-right\">Status</th>\n            </tr>\n          </thead>\n          <tbody>\n            <!-- Data to be displayed-->\n            <tr *ngFor=\"let taskItem of taskItems | paginate: {itemsPerPage:5, currentPage:p}\" (click)=\"selectTaskItem(taskItem)\">\n              <td class=\"alert alert-primary\" role=\"alert\">{{taskItem.description}}</td>\n              <td class=\"text-right\" class=\"alert alert-danger\" role=\"alert\">\n                <button class=\"btn btn-danger\" (click)=\"onDelete(taskItem); $event.stopPropagation();\" >Delete\n                </button>\n              </td>\n              <td class=\"text-right\" class=\"alert alert-dark\" role=\"alert\">\n               <a class=\"alert-link\">Completed</a><br>\n              </td>\n              <!-- compelted or not-->\n            </tr>\n            \n          </tbody>\n        </table>\n         \n        <pagination-controls class=\"myPagination\"\n        previousLabel =\"Previous Page\"\n        nextLabel=\"Next Page\"\n          (pageChange)=\"p = $event\" maxSize=\"4\"> \n        </pagination-controls>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -240,15 +243,47 @@ var TaskItemListComponent = /** @class */ (function () {
     }
     TaskItemListComponent.prototype.createForm = function () {
         this.taskForm = this.formBuilder.group({
-            item: ''
+            item: '',
         });
     };
     TaskItemListComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.taskItemService.getTaskItems().subscribe(function (taskItems) { return _this.taskItems = taskItems; });
     };
     TaskItemListComponent.prototype.onSubmit = function (model) {
         var _this = this;
-        this.taskItemService.saveTaskItem(model).subscribe(function (taskItem) { return _this.taskItems.push(taskItem); });
+        var taskItemToSave = {
+            id: this.selectedTaskItem ? this.selectedTaskItem.id : null,
+            description: model.item,
+        };
+        if (!this.selectedTaskItem) {
+            this.taskItemService.saveTaskItem(taskItemToSave).subscribe(function (taskItem) { return _this.taskItems.push(taskItem); });
+        }
+        else {
+            this.taskItemService.updateTaskItem(taskItemToSave).subscribe(function (result) { return _this.taskItems.filter((function (taskItem) { return _this.isSameTaskItem(result, taskItem); }))[0].description = result.description; });
+        }
+        this.selectedTaskItem = null;
+        this.taskForm.reset();
     };
+    TaskItemListComponent.prototype.isSameTaskItem = function (searchBy, lookingFor) {
+        return searchBy.id === lookingFor.id;
+    };
+    TaskItemListComponent.prototype.onDelete = function (taskItemToRemove, event) {
+        var _this = this;
+        this.taskItemService.deleteTaskItem(taskItemToRemove).subscribe(function (res) {
+            _this.taskItems = _this.taskItems.filter(function (taskItem) { return taskItem.id !== taskItemToRemove.id; });
+            _this.descriptionInput.nativeElement.focus();
+        });
+    };
+    TaskItemListComponent.prototype.selectTaskItem = function (taskItem) {
+        this.selectedTaskItem = taskItem;
+        this.taskForm.controls["item"].setValue(taskItem.description);
+        this.descriptionInput.nativeElement.focus();
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])("description"),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
+    ], TaskItemListComponent.prototype, "descriptionInput", void 0);
     TaskItemListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-task-item-list',
@@ -293,11 +328,28 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var TaskItemService = /** @class */ (function () {
     function TaskItemService(http) {
         this.http = http;
-        this.baseUrl = '/api/v1/task-item';
+        this.baseUrl = 'api/v1/task-item';
     }
     TaskItemService.prototype.saveTaskItem = function (taskItem) {
+        //debugger
         return this.http.post(this.baseUrl, taskItem)
             .map(function (res) { return res.json(); });
+        //response => console.log(response);
+        //err=> console.log(err);
+    };
+    TaskItemService.prototype.getTaskItems = function () {
+        return this.http.get(this.baseUrl)
+            .map(function (res) { return res.json(); });
+    };
+    TaskItemService.prototype.deleteTaskItem = function (taskItem) {
+        return this.http.delete(this.baseUrl + "/" + taskItem.id).map(this.extractData);
+    };
+    TaskItemService.prototype.updateTaskItem = function (taskItem) {
+        return this.http.put(this.baseUrl + "/" + taskItem.id, taskItem)
+            .map(function (res) { return res.json(); });
+    };
+    TaskItemService.prototype.extractData = function (res) {
+        return res.text().length ? res.json() : {};
     };
     TaskItemService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -370,7 +422,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\André Moleirinho\Projetos\TQS\QTasks\web\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\André Moleirinho\Projetos\TQS_Final\QTasks\web\src\main.ts */"./src/main.ts");
 
 
 /***/ })

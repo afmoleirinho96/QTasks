@@ -67,7 +67,6 @@ public class TaskItemServiceTest {
 		final long idToDelete=50L;
 		
 		doNothing().when(taskItemRepository).deleteById(idToDelete);
-		
 
 		subject.delete(idToDelete);
 		
@@ -75,6 +74,29 @@ public class TaskItemServiceTest {
 		
 		
 	}
+	
+	@Test
+    public void testShouldUpdateTaskItem() {
+			long idToUpdate=50L;
+			
+    		final TaskItem newTaskItem = new TaskItem();
+    		newTaskItem.setDescription("I am a task list item");
+    		newTaskItem.setId(50L);
+    		
+    		final TaskItem oldTaskItem = new TaskItem();
+    		oldTaskItem.setDescription("I am old");
+    		oldTaskItem.setId(50L);
+    		
+    		
+    		when(taskItemRepository.getOne(50L)).thenReturn(oldTaskItem);
+    		
+    		when(taskItemRepository.save(oldTaskItem)).thenReturn(newTaskItem);
+    		
+    		TaskItem response = subject.update(idToUpdate, newTaskItem);
+    		
+    		assertThat(response.getDescription(), equalTo("I am a task list item"));
+    		assertThat(response.getId(), equalTo(50L));
+    }
 	
 
 	

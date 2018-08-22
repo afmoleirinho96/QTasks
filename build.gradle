@@ -48,6 +48,10 @@ dependencies {
 	runtime('mysql:mysql-connector-java')
 	//compile 'org.hibernate:hibernate-core:4.3.6.Final'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	//testCompile 'junit:junit:4.12'
+	
+	compile('org.springframework.boot:spring-boot-starter-tomcat')
+	
 }
 
 /*adicionadas tasks para o ng build para correr gradle bootRun com propriedade ngbuild

@@ -48,7 +48,7 @@ module.exports = "/*!\n * Bootstrap v4.1.3 (https://getbootstrap.com/)\n * Copyr
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* You can add global styles to this file, and also import other style files */\n"
+module.exports = "/* You can add global styles to this file, and also import other style files */\n.myPagination .ngx-pagination .current{\n    background:white;\n  \n    border-bottom: 4px solid blue;\n    color:black;\n}\n"
 
 /***/ }),
 
@@ -580,8 +580,8 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\André Moleirinho\Projetos\TQS\QTasks\web\src\styles.css */"./src/styles.css");
-module.exports = __webpack_require__(/*! C:\Users\André Moleirinho\Projetos\TQS\QTasks\web\node_modules\bootstrap\dist\css\bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
+__webpack_require__(/*! C:\Users\André Moleirinho\Projetos\TQS_Final\QTasks\web\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\André Moleirinho\Projetos\TQS_Final\QTasks\web\node_modules\bootstrap\dist\css\bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
 
 
 /***/ })

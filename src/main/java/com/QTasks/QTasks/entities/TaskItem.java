@@ -28,7 +28,7 @@ public class TaskItem implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="task_id")
 	private long id;
-	//private boolean completed;
+	
 	
 	@Column(name="task_description")
 	private String description;
@@ -48,4 +48,6 @@ public class TaskItem implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	
 }
